@@ -451,15 +451,19 @@ const bulkSingleIssueCertificates = async (req, res) => {
   var pdfFiles = [];
 
   var today = new Date();
-  var month = String(today.getMonth() + 1).padStart(2, '0'); // Get the month (adding 1 because January is 0)
-  var day = String(today.getDate()).padStart(2, '0'); // Get the day
-  var year = today.getFullYear(); // Get the year
-  var hours = String(today.getHours()).padStart(2, '0'); // Get the hours
-  var minutes = String(today.getMinutes()).padStart(2, '0'); // Get the minutes
-  var seconds = String(today.getSeconds()).padStart(2, '0'); // Get the seconds
-
-  var formattedDateTime = month + '-' + day + '-' + year + '-' + hours + '-' + minutes + '-' + seconds;
-
+  var options = { 
+    month: '2-digit', 
+    day: '2-digit', 
+    year: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit', 
+    hour12: false, // Use 24-hour format
+    timeZone: 'America/New_York' // Set the timezone to US Eastern Time
+  };
+  
+  var formattedDateTime = today.toLocaleString('en-US', options).replace(/\//g, '-').replace(/,/g, '-').replace(/:/g, '-').replace(/\s/g, '');
+  
   const resultDierectory = path.join(__dirname, '../../uploads/completed');
 
   try {
@@ -617,13 +621,14 @@ const bulkSingleIssueCertificates = async (req, res) => {
           archive.file(filePath, { name: file });
       });
 
-      // Finalize the zip archive
-      archive.finalize();
-
       const fileBackup = await backupFileToCloud(fetchResultZipFile, resultFilePath, 1);
       if(fileBackup.response == false){
         console.log("The S3 backup failed", fileBackup.details);
       }
+
+      // Finalize the zip archive
+      archive.finalize();
+
 
       // Always delete the excel files (if it exists)
       if (fs.existsSync(excelFilePath)) {
@@ -664,15 +669,19 @@ const bulkBatchIssueCertificates = async (req, res) => {
   var pdfFiles = [];
 
   var today = new Date();
-  var month = String(today.getMonth() + 1).padStart(2, '0'); // Get the month (adding 1 because January is 0)
-  var day = String(today.getDate()).padStart(2, '0'); // Get the day
-  var year = today.getFullYear(); // Get the year
-  var hours = String(today.getHours()).padStart(2, '0'); // Get the hours
-  var minutes = String(today.getMinutes()).padStart(2, '0'); // Get the minutes
-  var seconds = String(today.getSeconds()).padStart(2, '0'); // Get the seconds
-
-  var formattedDateTime = month + '-' + day + '-' + year + '-' + hours + '-' + minutes + '-' + seconds;
-
+  var options = { 
+    month: '2-digit', 
+    day: '2-digit', 
+    year: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit', 
+    hour12: false, // Use 24-hour format
+    timeZone: 'America/New_York' // Set the timezone to US Eastern Time
+  };
+  
+  var formattedDateTime = today.toLocaleString('en-US', options).replace(/\//g, '-').replace(/,/g, '-').replace(/:/g, '-').replace(/\s/g, '');
+  
   const resultDierectory = path.join(__dirname, '../../uploads/completed');
 
   try {
@@ -933,6 +942,9 @@ const backupFileToCloud = async(file, filePath, type) => {
 
   const s3 = new AWS.S3();
   const fileStream = fs.createReadStream(filePath);
+
+  // const stats = await fs.promises.stat(filePath);
+  console.log("testing", filePath);
 
   const uploadParams = {
     Bucket: bucketName,
