@@ -111,12 +111,10 @@ const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFil
 
         console.log("Source Cert", pdfFilePath);
 
-        // var { txHash, linkUrl } = await issueCertificateWithRetry(fields.Certificate_Number, combinedHash);
-        // if (!linkUrl) {
-        //   return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry, Details: certs });
-        // }
-        var txHash = combinedHash;
-        var linkUrl = combinedHash;
+        var { txHash, linkUrl } = await issueCertificateWithRetry(fields.Certificate_Number, combinedHash);
+        if (!linkUrl) {
+          return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry, Details: certs });
+        }
 
         try {
           await isDBConnected();
@@ -242,12 +240,10 @@ const bulkIssueBatchCertificates = async (_pdfReponse, _excelResponse, excelFile
         var batchNumber = await newContract.getRootLength();
         var allocateBatchId = parseInt(batchNumber) + 1;
 
-        // var { txHash, linkUrl } = await issueBatchCertificateWithRetry(tree.root);
-        // if (!linkUrl) {
-        //   return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry });
-        // }
-        var txHash = "combinedHash";
-        var linkUrl = "combinedHash";
+        var { txHash, linkUrl } = await issueBatchCertificateWithRetry(tree.root);
+        if (!linkUrl) {
+          return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry });
+        }
 
       } catch (error) {
         return ({ code: 400, status: false, message: messageCode.msgFailedAtBlockchain, Details: error });

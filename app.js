@@ -26,9 +26,9 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Blockchain API',
+      title: 'Bulk Issue API',
       version: '1.0.0',
-      description: 'API documentation for Blockchain module',
+      description: 'API documentation for Bulk Issue module',
     },
   },
   apis: ['./src/routes/*.js'], // Add other paths if needed
