@@ -1,14 +1,14 @@
-<h1 align="center">Aicerts_backend_nodejs</h1>
+<h1 align="center">Aicerts_bulk_Issuance_nodejs</h1>
 <div align="center">
 
-[![Author](http://img.shields.io/badge/author-@Aicerts-blue.svg)](https://www.linkedin.com/in/company/aicert/) [![GitHub license](https://img.shields.io/github/license/maitraysuthar/rest-api-nodejs-mongodb.svg)](https://github.com/aicerts/aicerts_backend_nodejs/blob/master/LICENSE) ![Aicerts (.io)](https://img.shields.io/travis/com/maitraysuthar/rest-api-nodejs-mongodb)
+[![Author](http://img.shields.io/badge/author-@Aicerts-blue.svg)](https://www.linkedin.com/in/company/aicert/) [![GitHub license](https://img.shields.io/github/license/maitraysuthar/rest-api-nodejs-mongodb.svg)](https://github.com/aicerts/aicerts_bulk_issuance_nodejs/blob/master/LICENSE) ![Aicerts (.io)](https://img.shields.io/travis/com/maitraysuthar/rest-api-nodejs-mongodb)
 
 </div>
 BlockchainCertification:- Aicerts is an open standard for building apps that issue and verify blockchain-based official certificates.
 
 ---
 
-An implementation of [AICerts](https://github.com/aicerts/aicerts_backend_nodejs) as a simple RESTful API service with API calls by `download`, `install`, and `start` for the Backend services of .
+An implementation of [AICerts](https://github.com/aicerts/aicerts_bulk_issuance_nodejs) as a simple RESTful API service with API calls by `download`, `install`, and `start` for the Backend services of .
 
 # Libraries Used
 
