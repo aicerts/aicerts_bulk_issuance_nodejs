@@ -22,10 +22,8 @@ const abi = require("../config/abi.json");
 
 // Importing functions from a custom module
 const {
-  convertDateOnVerification,
-  convertDateFormat,
+  wipeUploadFolder,
   extractQRCodeDataFromPDF, // Function to extract QR code data from a PDF file
-  cleanUploadFolder, // Function to clean up the upload folder
   isDBConnected // Function to check if the database connection is established
 } = require('../model/tasks'); // Importing functions from the '../model/tasks' module
 
@@ -65,7 +63,7 @@ const verify = async (req, res) => {
 
   if (pdfDoc.getPageCount() > 1) {
     // Respond with success status and certificate details
-    await cleanUploadFolder();
+    await wipeUploadFolder();
     return res.status(400).json({ status: "FAILED", message: messageCode.msgMultiPagePdf});
   }
 
@@ -73,7 +71,7 @@ const verify = async (req, res) => {
     // Extract QR code data from the PDF file
     const certificateData = await extractQRCodeDataFromPDF(file);
     if (certificateData === false) {
-      await cleanUploadFolder();
+      await wipeUploadFolder();
       return res.status(400).json({ status: "FAILED", message: messageCode.msgCertNotValid });
     }
 
@@ -104,7 +102,7 @@ const verify = async (req, res) => {
   }
 
   // Clean up the upload folder
-  await cleanUploadFolder();
+  await wipeUploadFolder();
 };
 
 /**
@@ -174,12 +172,12 @@ const verifyCertificationId = async (req, res) => {
     const response = await newContract.verifyCertificateById(inputId);
 
     // Validation checks for request data
-    if ([inputId].some(value => typeof value !== "string" || value == "string") || (!batchIssueExist && response === false)) {
+    if ([inputId].some(value => typeof value !== "string" || value == "string") || !batchIssueExist ) {
       // res.status(400).json({ message: "Please provide valid details" });
       let errorMessage = messageCode.msgPlsEnterValid;
 
       // Check for specific error conditions and update the error message accordingly
-      if (!batchIssueExist && response === false) {
+      if (!batchIssueExist) {
         errorMessage = messageCode.msgCertNotValid;
       }
 
@@ -187,24 +185,16 @@ const verifyCertificationId = async (req, res) => {
       return res.status(400).json({ status: "FAILED", message: errorMessage });
     } else {
 
-      if (response == true && singleIssueExist != null) {
-        if (singleIssueExist == null) {
-          const _verificationResponse = {
-            status: "FAILED",
-            message: messageCode.msgCertValidNoDetails,
-            details: inputId
-          };
-
-          return res.status(400).json(_verificationResponse);
-        }
+      if (singleIssueExist != null) {
+        
         try {
           var _polygonLink = `https://${process.env.NETWORK}/tx/${singleIssueExist.transactionHash}`;
 
           var completeResponse = {
             'Certificate Number': singleIssueExist.certificateNumber,
             'Course Name': singleIssueExist.course,
-            'Expiration Date': await convertDateFormat(singleIssueExist.expirationDate),
-            'Grant Date': await convertDateFormat(singleIssueExist.grantDate),
+            'Expiration Date': singleIssueExist.expirationDate,
+            'Grant Date': singleIssueExist.grantDate,
             'Name': singleIssueExist.name,
             'Polygon URL': _polygonLink
           };
@@ -238,8 +228,8 @@ const verifyCertificationId = async (req, res) => {
             var completeResponse = {
               'Certificate Number': batchIssueExist.certificateNumber,
               'Course Name': batchIssueExist.course,
-              'Expiration Date': await convertDateFormat(batchIssueExist.expirationDate),
-              'Grant Date': await convertDateFormat(batchIssueExist.grantDate),
+              'Expiration Date': batchIssueExist.expirationDate,
+              'Grant Date': batchIssueExist.grantDate,
               'Name': batchIssueExist.name,
               'Polygon URL': _polygonLink
             };
