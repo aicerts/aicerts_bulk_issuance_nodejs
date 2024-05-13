@@ -24,7 +24,6 @@ const {
   insertBulkBatchIssueData,
   addLinkToPdf, // Function to add a link to a PDF file
   calculateHash, // Function to calculate the hash of a file
-  cleanUploadFolder, // Function to clean up the upload folder
   isDBConnected, // Function to check if the database connection is established
 } = require('../model/tasks'); // Importing functions from the '../model/tasks' module
 

@@ -143,7 +143,7 @@ const bulkSingleIssueCertificates = async (req, res) => {
 
     filesList = await fs.promises.readdir(extractionPath);
 
-    if (filesList.length == 0) {
+    if (filesList.length == 0 || filesList.length == 1) {
       res.status(400).json({ status: "FAILED", message: messageCode.msgUnableToFindFiles });
       // await cleanUploadFolder();
       await wipeUploadFolder();
@@ -358,7 +358,7 @@ const bulkBatchIssueCertificates = async (req, res) => {
     });
     filesList = await fs.promises.readdir(extractionPath);
 
-    if (filesList.length == 0) {
+    if (filesList.length == 0 || filesList.length == 1) {
       res.status(400).json({ status: "FAILED", message: messageCode.msgUnableToFindFiles });
       // await cleanUploadFolder();
       await wipeUploadFolder();
