@@ -331,71 +331,6 @@ const insertBulkBatchIssueData = async (data) => {
   }
 };
 
-// Function to insert certification data into MongoDB
-const insertCertificateData = async (data) => {
-  try {
-    // Create a new Issues document with the provided data
-    const newIssue = new Issues({
-      issuerId: data.issuerId,
-      transactionHash: data.transactionHash,
-      certificateHash: data.certificateHash,
-      certificateNumber: data.certificateNumber,
-      name: data.name,
-      course: data.course,
-      grantDate: data.grantDate,
-      expirationDate: data.expirationDate,
-      certificateStatus: 1,
-      issueDate: Date.now() // Set the issue date to the current timestamp
-    });
-
-    // Save the new Issues document to the database
-    const result = await newIssue.save();
-
-    const idExist = await User.findOne({ issuerId: data.issuerId });
-    // If user with given id exists, update certificatesIssued count
-    const previousCount = idExist.certificatesIssued || 0; // Initialize to 0 if certificatesIssued field doesn't exist
-    idExist.certificatesIssued = previousCount + 1;
-    await idExist.save(); // Save the changes to the existing user
-    // Logging confirmation message
-    // console.log("Certificate data inserted");
-  } catch (error) {
-    // Handle errors related to database connection or insertion
-    console.error("Error connecting to MongoDB:", error);
-  }
-};
-
-// Function to insert certification data into MongoDB
-const insertBatchCertificateData = async (data) => {
-  try {
-
-    // Insert data into MongoDB
-    const newBatchIssue = new BatchIssues({
-      issuerId: data.issuerId,
-      batchId: data.batchId,
-      proofHash: data.proofHash,
-      encodedProof: data.encodedProof,
-      transactionHash: data.transactionHash,
-      certificateHash: data.certificateHash,
-      certificateNumber: data.certificateNumber,
-      name: data.name,
-      course: data.course,
-      grantDate: data.grantDate,
-      expirationDate: data.expirationDate,
-      issueDate: Date.now()
-    });
-
-    const result = await newBatchIssue.save();
-
-    const idExist = await User.findOne({ issuerId: data.issuerId });
-    // If user with given id exists, update certificatesIssued count
-    const previousCount = idExist.certificatesIssued || 0; // Initialize to 0 if certificatesIssued field doesn't exist
-    idExist.certificatesIssued = previousCount + 1;
-    await idExist.save(); // Save the changes to the existing user
-
-  } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
-  }
-};
 
 // Function to extract certificate information from a QR code text
 const extractCertificateInfo = async (qrCodeText) => {
@@ -662,25 +597,6 @@ const calculateHash = (data) => {
   return crypto.createHash('sha256').update(data).digest('hex').toString();
 };
 
-// Function to create a new instance of Web3 and connect to a specified RPC endpoint
-const web3i = async () => {
-  var provider = new ethers.providers.getDefaultProvider(process.env.RPC_ENDPOINT);
-  await provider.getNetwork(); // Attempt to detect the network
-
-  if (provider) {
-
-    // Get contract ABI from configuration
-    const contractABI = abi;
-    var signer = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-    // Create a new contract instance using the ABI and contract address
-    const contract = new ethers.Contract(contractAddress, contractABI, signer);
-    return contract; // Return the contract instance
-
-  } else {
-    // console.log("Invalid Endpoint");
-    return false;
-  }
-};
 
 const fileFilter = (req, file, cb) => {
   // Check if the file MIME type is a PDF
@@ -759,7 +675,7 @@ const wipeUploadFolder = async () => {
       try {
         if (fs.lstatSync(filePathToDelete).isDirectory()) {
           // If it's a directory, recursively delete it
-          fs.rmdirSync(filePathToDelete, { recursive: true });
+          fs.rmSync(filePathToDelete, { recursive: true });
         } else {
           // If it's a file, just delete it
           fs.unlinkSync(filePathToDelete);
@@ -849,11 +765,9 @@ module.exports = {
   isCertificationIdExisted,
 
   // Function to insert certificate data into MongoDB
-  insertCertificateData,
   insertBulkSingleIssueData,
 
   // Insert Batch certificate data into Database
-  insertBatchCertificateData,
   insertBulkBatchIssueData,
 
   // Function to extract certificate information from a QR code text
@@ -879,8 +793,6 @@ module.exports = {
   // Function to calculate the hash of data using SHA-256 algorithm
   calculateHash,
 
-  // Function to initialize and return a web3 instance
-  web3i,
 
   // Function for filtering file uploads based on MIME type Pdf
   fileFilter,
