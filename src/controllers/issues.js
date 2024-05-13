@@ -45,9 +45,7 @@ const {
   isDBConnected, // Function to check if the database connection is established
 } = require('../model/tasks'); // Importing functions from the '../model/tasks' module
 
-const { handleExcelFile, handleBulkExcelFile } = require('../model/handleExcel');
-const { handleIssueCertification, handleIssuePdfCertification, bulkIssueSingleCertificates, bulkIssueBatchCertificates } = require('../model/issue');
-
+const { handleBulkExcelFile } = require('../model/handleExcel');
 // Retrieve contract address from environment variable
 const contractAddress = process.env.CONTRACT_ADDRESS;
 
