@@ -20,6 +20,7 @@ const { PDFDocument } = pdf;
 
 // Import custom cryptoFunction module for encryption and decryption
 const { generateEncryptedUrl } = require("../common/cryptoFunction");
+
 const AWS = require('../config/aws-config');
 
 // Import MongoDB models
@@ -35,10 +36,6 @@ app.use("../../uploads", express.static(path.join(__dirname, "uploads")));
 
 // Importing functions from a custom module
 const {
-  convertDateFormat,
-  insertBatchCertificateData, // Function to insert Batch certificate data into the database
-  dateFormatToStore,
-  calculateHash, // Function to calculate the hash of a file
   cleanUploadFolder, // Function to clean up the upload folder
   flushUploadFolder,
   wipeUploadFolder,
@@ -46,6 +43,7 @@ const {
 } = require('../model/tasks'); // Importing functions from the '../model/tasks' module
 
 const { handleBulkExcelFile } = require('../model/handleExcel');
+const { bulkIssueSingleCertificates, bulkIssueBatchCertificates } = require('../model/issue');
 // Retrieve contract address from environment variable
 const contractAddress = process.env.CONTRACT_ADDRESS;
 
@@ -358,7 +356,6 @@ const bulkBatchIssueCertificates = async (req, res) => {
           resolve();
         });
     });
-
     filesList = await fs.promises.readdir(extractionPath);
 
     if (filesList.length == 0) {
