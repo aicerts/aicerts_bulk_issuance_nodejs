@@ -111,7 +111,7 @@ const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFil
         console.log("Source Cert", pdfFilePath);
 
         var { txHash, linkUrl } = await issueCertificateWithRetry(fields.Certificate_Number, combinedHash);
-        if (!linkUrl) {
+        if (!linkUrl || !txHash) {
           return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry, Details: certs });
         }
 
@@ -240,9 +240,11 @@ const bulkIssueBatchCertificates = async (_pdfReponse, _excelResponse, excelFile
         var allocateBatchId = parseInt(batchNumber) + 1;
 
         var { txHash, linkUrl } = await issueBatchCertificateWithRetry(tree.root);
-        if (!linkUrl) {
+        if (!linkUrl || !txHash) {
           return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry });
         }
+        // var txHash = "txHash";
+        // var linkUrl = "linkUrl";
 
       } catch (error) {
         return ({ code: 400, status: false, message: messageCode.msgFailedAtBlockchain, Details: error });
