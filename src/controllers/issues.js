@@ -294,7 +294,7 @@ const bulkSingleIssueCertificates = async (req, res) => {
  * @param {Object} res - Express response object.
  */
 
-const _bulkBatchIssueCertificates = async (req, res) => {
+const bulkBatchIssueCertificates = async (req, res) => {
   // Check if the file path matches the pattern
   if (!req.file || !req.file.originalname.endsWith('.zip')) {
     // File path does not match the pattern
@@ -505,7 +505,7 @@ const _bulkBatchIssueCertificates = async (req, res) => {
   }
 };
 
-const bulkBatchIssueCertificates = async (req, res) => {
+const _bulkBatchIssueCertificates = async (req, res) => {
   // Check if the file path matches the pattern
   if (!req.file || !req.file.originalname.endsWith('.zip')) {
     // File path does not match the pattern

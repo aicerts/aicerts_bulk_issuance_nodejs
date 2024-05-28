@@ -108,7 +108,7 @@ const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFil
         }
         var combinedHash = calculateHash(JSON.stringify(hashedFields));
 
-        console.log("Source Cert", pdfFilePath);
+        // console.log("Source Cert", pdfFilePath);
 
         var { txHash, linkUrl } = await issueCertificateWithRetry(fields.Certificate_Number, combinedHash);
         if (!linkUrl || !txHash) {
@@ -239,12 +239,12 @@ const bulkIssueBatchCertificates = async (_pdfReponse, _excelResponse, excelFile
         var batchNumber = await newContract.getRootLength();
         var allocateBatchId = parseInt(batchNumber) + 1;
 
-        // var { txHash, linkUrl } = await issueBatchCertificateWithRetry(tree.root);
-        // if (!linkUrl || !txHash) {
-        //   return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry });
-        // }
-        var txHash = "txHash";
-        var linkUrl = "linkUrl";
+        var { txHash, linkUrl } = await issueBatchCertificateWithRetry(tree.root);
+        if (!linkUrl || !txHash) {
+          return ({ code: 400, status: false, message: messageCode.msgFaileToIssueAfterRetry });
+        }
+        // var txHash = "txHash";
+        // var linkUrl = "linkUrl";
 
       } catch (error) {
         return ({ code: 400, status: false, message: messageCode.msgFailedAtBlockchain, Details: error });
