@@ -128,17 +128,13 @@ router.post('/bulk-single-issue', _upload.single("zipFile"), adminController.bul
  *       '200':
  *         description: Files successfully extracted
  *         content:
- *           application/json:
+ *           application/zip:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 detailsQR:
- *                   type: string
+ *               type: string
+ *               format: binary
  *             example:
  *               status: "SUCCESS"
- *               message: Files successfully extracted.
+ *               message: ZIP file containing the archived documents.
  *       '400':
  *         description: Files successfully not extracted
  *         content:

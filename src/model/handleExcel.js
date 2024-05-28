@@ -126,13 +126,13 @@ const handleBulkExcelFile = async(_path) => {
                         }
 
                         // Assuming BatchIssues is your MongoDB model
-                        for (const id of certificationIDs) {
-                        const issueExist = await Issues.findOne({ certificateNumber: id });
-                        const _issueExist = await BatchIssues.findOne({ certificateNumber: id });
-                        if (issueExist || _issueExist) {
-                            matchingIDs.push(id);
-                        }
-                        }
+                        // for (const id of certificationIDs) {
+                        // const issueExist = await Issues.findOne({ certificateNumber: id });
+                        // const _issueExist = await BatchIssues.findOne({ certificateNumber: id });
+                        // if (issueExist || _issueExist) {
+                        //     matchingIDs.push(id);
+                        // }
+                        // }
 
                         if (matchingIDs.length > 0) {
 
