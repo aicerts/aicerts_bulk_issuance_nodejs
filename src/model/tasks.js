@@ -17,6 +17,7 @@ const moment = require('moment');
 
 const { decryptData } = require("../common/cryptoFunction"); // Custom functions for cryptographic operations
 
+const noteContent = process.env.NOTE_CONTENT || "Note: *";
 const retryDelay = parseInt(process.env.TIME_DELAY);
 const maxRetries = 3; // Maximum number of retries
 
@@ -515,6 +516,13 @@ const addLinkToPdf = async (
   // Get page width and height
   const width = page.getWidth();
   const height = page.getHeight();
+
+  // Add note content to the PDF page
+  page.drawText(noteContent, {
+    x: 5, // X coordinate of the text
+    y: 10, // Y coordinate of the text
+    size: 5, // Font size
+  });
 
   // Add link URL to the PDF page
   page.drawText(linkUrl, {
