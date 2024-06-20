@@ -54,7 +54,7 @@ var messageCode = require("../common/codes");
 
 
 const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFilePath) => {
-
+  console.log("single inputs", _pdfReponse, _excelResponse[0], excelFilePath);
   const pdfResponse = _pdfReponse;
   const excelResponse = _excelResponse;
   var insertPromises = []; // Array to hold all insert promises
@@ -62,6 +62,7 @@ const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFil
   try {
     // Check if the directory exists, if not, create it
     const destDirectory = path.join(__dirname, '../../uploads/completed');
+    console.log("Present working directory", __dirname, destDirectory);
     if (fs.existsSync(destDirectory)) {
       // Delete the existing directory recursively
       fs.rmSync(destDirectory, { recursive: true });
@@ -78,9 +79,11 @@ const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFil
 
     try {
       await isDBConnected();
+      console.log("working directory", __dirname);
       for (let i = 0; i < pdfResponse.length; i++) {
         const pdfFileName = pdfResponse[i];
         const pdfFilePath = path.join(__dirname, '../../uploads', pdfFileName);
+        console.log("pdf directory path", pdfFilePath);
 
         // Extract Certs from pdfFileName
         const certs = pdfFileName.split('.')[0]; // Remove file extension
@@ -195,7 +198,7 @@ const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFil
 };
 
 const bulkIssueBatchCertificates = async (_pdfReponse, _excelResponse, excelFilePath) => {
-
+  console.log("Batch inputs", _pdfReponse, _excelResponse[0], excelFilePath);
   const pdfResponse = _pdfReponse;
   const excelResponse = _excelResponse[0];
   var insertPromises = []; // Array to hold all insert promises
@@ -203,6 +206,7 @@ const bulkIssueBatchCertificates = async (_pdfReponse, _excelResponse, excelFile
   try {
     // Check if the directory exists, if not, create it
     const destDirectory = path.join(__dirname, '../../uploads/completed');
+    console.log("Present working directory", __dirname, destDirectory);
     if (fs.existsSync(destDirectory)) {
       // Delete the existing directory recursively
       fs.rmSync(destDirectory, { recursive: true });
@@ -249,10 +253,12 @@ const bulkIssueBatchCertificates = async (_pdfReponse, _excelResponse, excelFile
       }
 
       if (pdfResponse.length == _excelResponse[1]) {
+          console.log("working directory", __dirname);
 
         for (let i = 0; i < pdfResponse.length; i++) {
           const pdfFileName = pdfResponse[i];
           const pdfFilePath = path.join(__dirname, '../../uploads', pdfFileName);
+          console.log("pdf directory path", pdfFilePath);
 
           // Extract Certs from pdfFileName
           const certs = pdfFileName.split('.')[0]; // Remove file extension
