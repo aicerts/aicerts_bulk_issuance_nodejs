@@ -59,6 +59,10 @@ const bulkIssueSingleCertificates = async (_pdfReponse, _excelResponse, excelFil
   const excelResponse = _excelResponse;
   var insertPromises = []; // Array to hold all insert promises
 
+  if(!pdfResponse || pdfResponse.length ==  0){
+    return ({ code: 400, status: false, message: messageCode.msgUnableToFindPdfFiles });
+  }
+
   try {
     // Check if the directory exists, if not, create it
     const destDirectory = path.join(__dirname, '../../uploads/completed');
@@ -202,6 +206,10 @@ const bulkIssueBatchCertificates = async (_pdfReponse, _excelResponse, excelFile
   const pdfResponse = _pdfReponse;
   const excelResponse = _excelResponse[0];
   var insertPromises = []; // Array to hold all insert promises
+
+  if(!pdfResponse || pdfResponse.length ==  0){
+    return ({ code: 400, status: false, message: messageCode.msgUnableToFindPdfFiles });
+  }
 
   try {
     // Check if the directory exists, if not, create it
